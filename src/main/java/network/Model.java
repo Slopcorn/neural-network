@@ -1,6 +1,6 @@
 package main.java.network;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class Model implements Serializable {
     private static final long serialVersionUID = 42L;
@@ -40,5 +40,23 @@ public class Model implements Serializable {
     private Object learn(Matrix data, Matrix expected, int layer) {
         // TODO: everything. this is probably going to be recursive at this stage
         return null;
+    }
+
+    public void save(String filename) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+            oos.writeObject(this);
+            System.out.println("Model saved as " + filename + "!");
+        } catch (IOException e) {
+            System.out.println("Could not save model! " + e);
+        }
+    }
+
+    public static Model load(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+            return (Model) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Could not load model! " + e);
+        }
+        return null;    // Probably bad.
     }
 }
