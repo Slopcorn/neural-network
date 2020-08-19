@@ -18,4 +18,27 @@ public class Model implements Serializable {
             biases[i]  = new Matrix(sizes[i], 1);
         }
     }
+
+    public void learn(double[][] data, double[][] expected, int epochs) {
+        assert data.length == expected.length;
+        // Change data to a more suitable form.
+        Matrix[] newData = new Matrix[data.length];
+        Matrix[] newExpected = new Matrix[data.length];
+        for (int i = 0; i < data.length; i++) {
+            newData[i]     = Matrix.convertArrayToMatrix(data[i]);
+            newExpected[i] = Matrix.convertArrayToMatrix(expected[i]);
+        }
+
+        // Learn on the data.
+        for (int epoch = 0; epoch < epochs; epoch++) {
+            for (int i = 0; i < data.length; i++) {
+                learn(newData[i], newExpected[i], 1); // Start at layer 1
+            }
+        }
+    }
+
+    private Object learn(Matrix data, Matrix expected, int layer) {
+        // TODO: everything. this is probably going to be recursive at this stage
+        return null;
+    }
 }
