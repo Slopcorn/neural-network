@@ -84,7 +84,7 @@ public class Matrix implements Serializable {
         return result;
     }
 
-    private static Matrix convertArrayToMatrix(double[] data) {
+    public static Matrix convertArrayToMatrix(double[] data) {
         // The array is turned into a column vector.
         Matrix newMatrix = new Matrix(data.length, 1);
         for (int i = 0; i < data.length; i++) {
