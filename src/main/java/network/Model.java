@@ -15,7 +15,7 @@ public class Model implements Serializable {
         biases  = new Matrix[sizes.length - 1];
         for (int i = 0; i < sizes.length - 1; i++) {
             weights[i] = new Matrix(sizes[i + 1], sizes[i]);
-            biases[i]  = new Matrix(sizes[i], 1);
+            biases[i]  = new Matrix(sizes[i + 1], 1);
         }
     }
 
