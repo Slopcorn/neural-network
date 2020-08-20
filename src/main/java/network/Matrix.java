@@ -65,7 +65,7 @@ public class Matrix implements Serializable {
         // The array is turned into a column vector.
         Matrix newMatrix = new Matrix(data.length, 1);
         for (int i = 0; i < data.length; i++) {
-            newMatrix.set(i, 1, data[i]);
+            newMatrix.set(i, 0, data[i]);
         }
         return newMatrix;
     }
