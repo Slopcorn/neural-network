@@ -52,32 +52,6 @@ public class Matrix implements Serializable {
         return matrix[n].clone();
     }
 
-    public static Matrix mult(Matrix l, Matrix r) {
-        // Dimensions have to match - n1, m1 x n2, m2 = n1, m2; m1 and n2 have to be the same
-        if (l.getCols() != r.getRows()) {
-            throw new RuntimeException("Matrix multiplication operands do not have appropriate sizes");
-        }
-        // The size of the new matrix.
-        int n = l.getRows();
-        int m = r.getCols();
-
-        // Do the multiplication here.
-        // Every element inside the matrix is the dot product
-        // of a row from the left operand and a column
-        // from the right operand.
-        // Since we can only really access rows easily, transpose the right.
-        // Then we can access a column vector by pulling a row from the transposed matrix.
-        r = r.transposed();
-
-        double[][] result = new double[n][m];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                result[i][j] = dotProduct(l.getRow(i), r.getRow(j));
-            }
-        }
-        return new Matrix(n, m, result);
-    }
-
     private static double dotProduct(double[] row1, double[] row2) {
         // These should be the same length anyway now.
         double result = 0;
@@ -94,6 +68,57 @@ public class Matrix implements Serializable {
             newMatrix.set(i, 1, data[i]);
         }
         return newMatrix;
+    }
+
+    public static Matrix add(Matrix l, Matrix r) {
+        // Check size.
+        if (l.getRows() != r.getRows() || l.getCols() != r.getCols()) {
+            throw new IllegalArgumentException("Matrix addition operands are not of the same size");
+        }
+        // The size of the new matrix, really for convenience.
+        int n = l.getRows();
+        int m = l.getCols();
+        double[][] result = new double[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                result[i][j] = l.get(i, j) + r.get(i, j);
+            }
+        }
+        return new Matrix(n, m, result);
+    }
+
+    public static Matrix mult(Matrix l, Matrix r) {
+        // Check size.
+        if (l.getCols() != r.getRows()) {
+            throw new IllegalArgumentException("Matrix multiplication operands do not have appropriate sizes");
+        }
+        // The size of the new matrix.
+        int n = l.getRows();
+        int m = r.getCols();
+
+        r = r.transposed(); // Transpose the right for easy access to its columns
+        double[][] result = new double[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                result[i][j] = dotProduct(l.getRow(i), r.getRow(j));    // Each element as dot product.
+            }
+        }
+        return new Matrix(n, m, result);
+    }
+
+    public static Matrix scalarMult(double a, Matrix x) {
+        int n = x.getRows();
+        int m = x.getCols();
+
+        Matrix out = new Matrix(n, m);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                out.set(i, j, a * x.get(i, j));
+            }
+        }
+
+        return out;
     }
 
     @Override
