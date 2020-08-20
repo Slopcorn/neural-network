@@ -52,30 +52,33 @@ public class Matrix implements Serializable {
         return matrix[n].clone();
     }
 
-    public Matrix mult(Matrix other) {
+    public static Matrix mult(Matrix l, Matrix r) {
         // Dimensions have to match - n1, m1 x n2, m2 = n1, m2; m1 and n2 have to be the same
-        if (cols != other.getRows()) {
+        if (l.getCols() != r.getRows()) {
             throw new RuntimeException("Matrix multiplication operands do not have appropriate sizes");
         }
+        // The size of the new matrix.
+        int n = l.getRows();
+        int m = r.getCols();
+
         // Do the multiplication here.
         // Every element inside the matrix is the dot product
         // of a row from the left operand and a column
         // from the right operand.
         // Since we can only really access rows easily, transpose the right.
         // Then we can access a column vector by pulling a row from the transposed matrix.
-        Matrix right = other.transposed();
+        r = r.transposed();
 
-        // The new matrix is of size: n (of this one) x m (of the other one)
-        double[][] result = new double[rows][other.getCols()];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < other.getCols(); j++) {
-                result[i][j] = dotProduct(this.getRow(i), right.getRow(j));
+        double[][] result = new double[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                result[i][j] = dotProduct(l.getRow(i), r.getRow(j));
             }
         }
-        return new Matrix(rows, other.getCols(), result);
+        return new Matrix(n, m, result);
     }
 
-    private double dotProduct(double[] row1, double[] row2) {
+    private static double dotProduct(double[] row1, double[] row2) {
         // These should be the same length anyway now.
         double result = 0;
         for (int i = 0; i < row1.length; i++) {
@@ -116,8 +119,8 @@ public class Matrix implements Serializable {
         right.set(0, 2, 3);
         right.set(0, 3, 4);
         System.out.println(right.toString());
-        Matrix mult = left.mult(right);
+        Matrix mult = mult(left, right);
         System.out.println(mult.toString());
-        System.out.println(mult.mult(left));
+        System.out.println(mult(mult, left));
     }
 }
