@@ -40,6 +40,11 @@ public class Model implements Serializable {
         }
     }
 
+    public double[] score(double[] input) {
+        Matrix[] scores = feedforward(Matrix.arrayToColumnVector(input));
+        return Matrix.columnVectorToArray(scores[scores.length - 1]);
+    }
+
     public void learn(double[][] data, double[][] expected, int epochs) {
         assert data.length == expected.length;
         // Change data to a more suitable form.
