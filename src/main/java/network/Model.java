@@ -89,7 +89,6 @@ public class Model implements Serializable {
     }
 
     private void fixWeights(Matrix activation, Matrix error, int layer) {
-        Matrix w = weights[layer];
         Matrix errorsWeights = Matrix.mult(error, activation.transposed());
         weights[layer] = Matrix.add(weights[layer], Matrix.scalarMult(rate, errorsWeights));
         biases[layer]  = Matrix.add(biases[layer],  Matrix.scalarMult(rate, error));
