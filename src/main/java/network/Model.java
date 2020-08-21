@@ -25,8 +25,8 @@ public class Model implements Serializable {
         Matrix[] newData = new Matrix[data.length];
         Matrix[] newExpected = new Matrix[data.length];
         for (int i = 0; i < data.length; i++) {
-            newData[i]     = Matrix.convertArrayToMatrix(data[i]);
-            newExpected[i] = Matrix.convertArrayToMatrix(expected[i]);
+            newData[i]     = Matrix.arrayToColumnVector(data[i]);
+            newExpected[i] = Matrix.arrayToColumnVector(expected[i]);
         }
 
         // Learn on the data.

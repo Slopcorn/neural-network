@@ -61,13 +61,15 @@ public class Matrix implements Serializable {
         return result;
     }
 
-    public static Matrix convertArrayToMatrix(double[] data) {
-        // The array is turned into a column vector.
-        Matrix newMatrix = new Matrix(data.length, 1);
-        for (int i = 0; i < data.length; i++) {
-            newMatrix.set(i, 0, data[i]);
+    public static Matrix arrayToColumnVector(double[] data) {
+        return new Matrix(1, data.length, new double[][]{data}).transposed();
+    }
+
+    public static double[] columnVectorToArray(Matrix matrix) {
+        if (matrix.getCols() != 1) {
+            throw new IllegalArgumentException("Tried to convert a non column vector matrix to array");
         }
-        return newMatrix;
+        return matrix.transposed().getRow(0);
     }
 
     public static Matrix add(Matrix l, Matrix r) {
