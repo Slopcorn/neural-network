@@ -6,9 +6,9 @@ import java.util.Arrays;
 public class Matrix implements Serializable {
     private static final long serialVersionUID = 42L;
 
-    private int rows;
-    private int cols;
-    private double[][] matrix;
+    private final int rows;
+    private final int cols;
+    private final double[][] matrix;
 
     public Matrix(int rows, int cols) {
         this.rows = rows;
