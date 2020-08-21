@@ -1,6 +1,7 @@
 package main.java.network;
 
 import java.io.*;
+import java.util.Random;
 
 public class Model implements Serializable {
     private static final long serialVersionUID = 42L;
@@ -22,6 +23,20 @@ public class Model implements Serializable {
         for (int i = 0; i < sizes.length - 1; i++) {
             weights[i] = new Matrix(sizes[i + 1], sizes[i]);
             biases[i]  = new Matrix(sizes[i + 1], 1);
+        }
+        // Initial randomisation of weights
+        Random random = new Random(42);
+        for (int i = 0; i < weights.length; i++) {
+            randomiseMatrix(weights[i], random);
+            randomiseMatrix(biases[i], random);
+        }
+    }
+
+    private void randomiseMatrix(Matrix m, Random random) {
+        for (int i = 0; i < m.getRows(); i++) {
+            for (int j = 0; j < m.getCols(); j++) {
+                m.set(i, j, random.nextGaussian());
+            }
         }
     }
 
