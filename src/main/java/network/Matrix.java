@@ -133,23 +133,4 @@ public class Matrix implements Serializable {
         }
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        // Just a test method.
-        Matrix left = new Matrix(4, 1);
-        left.set(0, 0, 1);
-        left.set(1, 0, 2);
-        left.set(2, 0, 3);
-        left.set(3, 0, 4);
-        System.out.println(left.toString());
-        Matrix right = new Matrix(1, 4);
-        right.set(0, 0, 1);
-        right.set(0, 1, 2);
-        right.set(0, 2, 3);
-        right.set(0, 3, 4);
-        System.out.println(right.toString());
-        Matrix mult = mult(left, right);
-        System.out.println(mult.toString());
-        System.out.println(mult(mult, left));
-    }
 }
