@@ -87,6 +87,10 @@ public class Matrix implements Serializable {
         return new Matrix(n, m, result);
     }
 
+    public static Matrix sub(Matrix l, Matrix r) {
+        return add(l, scalarMult(-1, r));
+    }
+
     public static Matrix mult(Matrix l, Matrix r) {
         // Check size.
         if (l.getCols() != r.getRows()) {
