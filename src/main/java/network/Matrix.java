@@ -127,6 +127,23 @@ public class Matrix implements Serializable {
         return out;
     }
 
+    public static Matrix multElementWise(Matrix l, Matrix r) {
+        // Check size.
+        if (l.getRows() != r.getRows() || l.getCols() != r.getCols()) {
+            throw new IllegalArgumentException("Matrix element-wise multiplication operands are not of the same size");
+        }
+        // The size of the new matrix, really for convenience.
+        int n = l.getRows();
+        int m = l.getCols();
+        double[][] result = new double[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                result[i][j] = l.get(i, j) * r.get(i, j);
+            }
+        }
+        return new Matrix(n, m, result);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
