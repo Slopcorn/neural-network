@@ -59,7 +59,7 @@ public class Model implements Serializable {
         for (int epoch = 0; epoch < epochs; epoch++) {
             for (int i = 0; i < newData.length; i++) {
                 Matrix[] result = feedforward(newData[i]);    // Activations in all layers
-                // TODO backprop
+                backpropagate(result, newExpected[i]);
             }
         }
     }
@@ -78,6 +78,32 @@ public class Model implements Serializable {
         activations[weights.length] = scores;
 
         return activations;
+    }
+
+    private void backpropagate(Matrix[] activations, Matrix expected) {
+        for (int i = weights.length - 1; i >= 0; i--) {
+            Matrix error = Matrix.sub(expected, activations[i + 1]);
+            if (i != 0) expected = findNextExpected(activations[i + 1], i);
+            fixWeights(activations[i], error, i);
+        }
+    }
+
+    private void fixWeights(Matrix activation, Matrix error, int layer) {
+        Matrix w = weights[layer];
+        Matrix errorsWeights = Matrix.mult(error, activation.transposed());
+        weights[layer] = Matrix.add(weights[layer], Matrix.scalarMult(rate, errorsWeights));
+        biases[layer]  = Matrix.add(biases[layer],  Matrix.scalarMult(rate, error));
+    }
+
+    private Matrix findNextExpected(Matrix expected, int layer) {
+        // TODO: figure this one out
+        // This thing will absolutely not work
+        // Calculating ideal values for previous layer by
+        // calculating the 'feedforward'... backwards
+        Matrix w = weights[layer].transposed();
+        Matrix idealsPossblyIDontKnow = Matrix.mult(w, expected);
+        applySigmoid(idealsPossblyIDontKnow);
+        return idealsPossblyIDontKnow;
     }
 
     private static void applySigmoid(Matrix scores) {
