@@ -7,10 +7,16 @@ public class Model implements Serializable {
 
     Matrix[] weights;   // Weights between each pair of layers
     Matrix[] biases;    // Bias column vector for each non-out layer
+    double rate;        // Learning rate
 
     public Model(int... sizes) {
+        this(0.5, sizes);   // Given a default learning rate
+    }
+
+    public Model(double rate, int... sizes) {
         // With n layers, we have n - 1 sets of weights
         // and layers with biases. Initialise accordingly.
+        this.rate = rate;
         weights = new Matrix[sizes.length - 1];
         biases  = new Matrix[sizes.length - 1];
         for (int i = 0; i < sizes.length - 1; i++) {
