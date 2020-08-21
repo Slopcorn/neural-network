@@ -31,15 +31,35 @@ public class Model implements Serializable {
 
         // Learn on the data.
         for (int epoch = 0; epoch < epochs; epoch++) {
-            for (int i = 0; i < data.length; i++) {
-                learn(newData[i], newExpected[i], 1); // Start at layer 1
+            for (int i = 0; i < newData.length; i++) {
+                Matrix result = feedforward(newData[i]);
+                // TODO backprop
             }
         }
     }
 
-    private Object learn(Matrix data, Matrix expected, int layer) {
-        // TODO: everything. this is probably going to be recursive at this stage
-        return null;
+    private Matrix feedforward(Matrix data) {
+        Matrix scores = data;   // Activations of the first layer
+        for (int i = 0; i < weights.length; i++) {  // Activations of the rest of the layers
+            scores = Matrix.add(Matrix.mult(weights[i], scores), biases[i]);
+            applySigmoid(scores);
+        }
+        return scores;
+    }
+
+    private static void applySigmoid(Matrix scores) {
+        int n = scores.getRows();
+        int m = scores.getCols();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                scores.set(i, j, sigmoid(scores.get(i, j)));
+            }
+        }
+    }
+
+    private static double sigmoid(double x) {
+        return 1.0 / (1 + Math.pow(Math.E, -x));
     }
 
     public void save(String filename) {
