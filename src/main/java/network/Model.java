@@ -32,19 +32,26 @@ public class Model implements Serializable {
         // Learn on the data.
         for (int epoch = 0; epoch < epochs; epoch++) {
             for (int i = 0; i < newData.length; i++) {
-                Matrix result = feedforward(newData[i]);
+                Matrix[] result = feedforward(newData[i]);    // Activations in all layers
                 // TODO backprop
             }
         }
     }
 
-    private Matrix feedforward(Matrix data) {
+    private Matrix[] feedforward(Matrix data) {
+        Matrix[] activations = new Matrix[weights.length + 1];
+
         Matrix scores = data;   // Activations of the first layer
+
         for (int i = 0; i < weights.length; i++) {  // Activations of the rest of the layers
+            activations[i] = scores;
             scores = Matrix.add(Matrix.mult(weights[i], scores), biases[i]);
             applySigmoid(scores);
         }
-        return scores;
+
+        activations[weights.length] = scores;
+
+        return activations;
     }
 
     private static void applySigmoid(Matrix scores) {
