@@ -2,6 +2,7 @@ package main.java.network;
 
 import java.io.*;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class Model implements Serializable {
     private static final long serialVersionUID = 42L;
@@ -47,19 +48,25 @@ public class Model implements Serializable {
 
     public void learn(double[][] data, double[][] expected, int epochs) {
         assert data.length == expected.length;
+        int sz = data.length;
         // Change data to a more suitable form.
-        Matrix[] newData = new Matrix[data.length];
-        Matrix[] newExpected = new Matrix[data.length];
-        for (int i = 0; i < data.length; i++) {
+        Matrix[] newData = new Matrix[sz];
+        Matrix[] newExpected = new Matrix[sz];
+        for (int i = 0; i < sz; i++) {
             newData[i]     = Matrix.arrayToColumnVector(data[i]);
             newExpected[i] = Matrix.arrayToColumnVector(expected[i]);
         }
 
+        // Make an index array. We shuffle this each epoch to shuffle the data.
+        int[] ix = IntStream.range(0, sz).toArray();
+        Random r = new Random(42);
+
         // Learn on the data.
         for (int epoch = 0; epoch < epochs; epoch++) {
-            for (int i = 0; i < newData.length; i++) {
-                Matrix[] result = feedforward(newData[i]);    // Activations in all layers
-                backpropagate(result, newExpected[i]);
+            shuffle(ix, r);
+            for (int i = 0; i < sz; i++) {
+                Matrix[] result = feedforward(newData[ix[i]]);  // Activations in all layers
+                backpropagate(result, newExpected[ix[i]]);
             }
         }
     }
@@ -118,6 +125,18 @@ public class Model implements Serializable {
 
     private static double sigmoid(double x) {
         return 1.0 / (1 + Math.pow(Math.E, -x));
+    }
+
+    private void shuffle(int[] ix, Random r) {
+        for (int i = 0; i < ix.length; i++) {
+            swap(ix, i, r.nextInt(ix.length));
+        }
+    }
+
+    private void swap(int[] ix, int i, int j) {
+        int temp = ix[i];
+        ix[i] = ix[j];
+        ix[j] = temp;
     }
 
     public void save(String filename) {
