@@ -90,8 +90,8 @@ public class Model implements Serializable {
     private void backpropagate(Matrix[] activations, Matrix expected) {
         for (int i = weights.length - 1; i >= 0; i--) {
             Matrix error = Matrix.sub(expected, activations[i + 1]);
-            if (i != 0) expected = findNextExpected(activations[i + 1], i);
             fixWeights(activations[i], error, i);
+            if (i != 0) expected = findNextExpected(activations[i + 1], i);
         }
     }
 
